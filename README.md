@@ -12,6 +12,7 @@ What's next:
  2. Visualization - displaying the information in a chart and exporting it to an XML file 
  3. Inputs - setting up a fool-proof way to gather inputs. This includes employee preferences and employer requirements 
  
- 
 Thoughts: 
- 1. Check out Google's Employee Scheduling (see bookmarked)
+ 1. Check out [Google's Employee Scheduling](https://developers.google.com/optimization/scheduling/employee_scheduling)
+   * after going through the above - should we integrate it with what we have? 
+   * output: shows all feasible solutions based on the constaints. [Here](https://developers.google.com/optimization/cp/cp_solver#cp-sat_variables) for an example. 
