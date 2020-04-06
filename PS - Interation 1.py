@@ -1,0 +1,165 @@
+from __future__ import print_function
+from ortools.sat.python import cp_model
+import numpy as np
+
+
+def main():
+
+
+#########################################################################################################
+    #
+    # # creating matrix of 1's and 0's
+    # import numpy as np
+    #
+    # senna = np.random.random_integers(0,1,size=(5,2))
+    # print(senna)
+    #
+    # # converting values in matrix to 0.5 or 1
+    # senna_convert = np.where(senna < 1, 0.5,1)
+    # total_hours_per_agent = sum(sum(senna_convert))
+    # print(senna_convert)
+    # print(total_hours_per_agent)
+    #
+    # # days_req conditions
+    # days_required = 2.5
+    #
+    # if total_hours_per_agent < days_required:
+    #     print("error")
+    # else:
+    #     print('true')
+
+
+#########################################################################################################
+    ## incorporating groups
+
+    ## define agents and groups to create a matrix for shift_requests
+    # [total_EEs_in_group, days_required]
+
+    group_1 = [3, 2]  # 2 full days
+    group_2 = [5, 2]  # 1 full day and 2 half days
+    # group_3 = [3, 2]            # 2 half days
+    # group_4 = [2, 2]            # 2 full days and 1 half day
+    # group_5 = [2, 1]
+
+
+    #creating matrices - we can create a function later!
+
+    group_1_matrix = []
+
+    for x in range(group_1[0]):
+        matrix = np.random.random_integers(0, 1, size=(5, 2))
+        group_1_matrix.append(matrix)
+
+    group_1_matrix = np.vstack(group_1_matrix)
+    print(group_1_matrix)
+
+
+    group_2_matrix = []
+
+    for x in range(group_2[0]):
+        matrix = np.random.random_integers(0, 1, size=(5, 2))
+        group_2_matrix.append(matrix)
+
+    group_2_matrix = np.vstack(group_2_matrix)
+    print(group_2_matrix)
+
+
+    ## declaring constraints - can make this into a function as well
+
+    group_1_conversion = np.where(group_1_matrix < 1, 0.5, 1)
+    group_2_conversion = np.where(group_2_matrix < 1, 0.5, 1)
+
+
+    total_hours_group_1 = sum(sum(group_1_conversion))
+    total_hours_group_2 = sum(sum(group_2_conversion))
+
+    print(group_1_conversion)
+    print(total_hours_group_1)
+
+    # days_req conditions
+    days_required_group_1 = group_1[0] * group_1[1]
+    days_required_group_2 = group_2[0] * group_2[1]
+
+    if total_hours_group_1 < days_required_group_1:
+        print("error")
+    else:
+        print('true')
+
+    if total_hours_group_2 < days_required_group_2:
+        print("error")
+    else:
+        print('true')
+
+#########################################################################################################
+
+    ## incorporate the preference into the schedule
+
+    num_nurses = 5
+    num_shifts = 3
+    num_days = 7
+    all_nurses = range(num_nurses)
+    all_shifts = range(num_shifts)
+    all_days = range(num_days)
+    # shift_requests = (include matrices for group1 and group2)
+
+
+    # Creates the model
+    model = cp_model.CpModel()
+
+    # Creates shift variables
+    # shifts[(n, d, s)]: nurse 'n' works shift 's' on day 'd'.
+
+    shifts = {}
+    for n in all_nurses:
+        for d in all_days:
+            for s in all_shifts:
+                shifts[(n, d,
+                        s)] = model.NewBoolVar('shift_n%id%is%i' % (n, d, s))
+
+    # Each shift is assigned to exactly one nurse in .
+    for d in all_days:
+        for s in all_shifts:
+            model.Add(sum(shifts[(n, d, s)] for n in all_nurses) == 1)
+
+    # Each nurse works at most one shift per day.
+    for n in all_nurses:
+        for d in all_days:
+            model.Add(sum(shifts[(n, d, s)] for s in all_shifts) <= 1)
+
+    # min_shifts_assigned is the largest integer such that every nurse can be
+    # assigned at least that number of shifts.
+    min_shifts_per_nurse = (num_shifts * num_days) // num_nurses
+    max_shifts_per_nurse = min_shifts_per_nurse + 1
+    for n in all_nurses:
+        num_shifts_worked = sum(
+            shifts[(n, d, s)] for d in all_days for s in all_shifts)
+        model.Add(min_shifts_per_nurse <= num_shifts_worked)
+        model.Add(num_shifts_worked <= max_shifts_per_nurse)
+
+    model.Maximize(
+        sum(shift_requests[n][d][s] * shifts[(n, d, s)] for n in all_nurses
+            for d in all_days for s in all_shifts))
+    # Creates the solver and solve.
+    solver = cp_model.CpSolver()
+    solver.Solve(model)
+    for d in all_days:
+        print('Day', d)
+        for n in all_nurses:
+            for s in all_shifts:
+                if solver.Value(shifts[(n, d, s)]) == 1:
+                    if shift_requests[n][d][s] == 1:
+                        print('Nurse', n, 'works shift', s, '(requested).')
+                    else:
+                        print('Nurse', n, 'works shift', s, '(not requested).')
+        print()
+
+    # Statistics.
+    print()
+    print('Statistics')
+    print('  - Number of shift requests met = %i' % solver.ObjectiveValue(),
+          '(out of', num_nurses * min_shifts_per_nurse, ')')
+    print('  - wall time       : %f s' % solver.WallTime())
+
+
+if __name__ == '__main__':
+    main()
