@@ -39,35 +39,7 @@ NEXT STEPS:
 #                    [1, 0, 0], [0, 0, 0]],
 #                   [[0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 0, 0], [1, 0, 0],
 #                    [0, 1, 0], [0, 0, 0]]]
-||||||| cd290e6... Update PS - Interation 1.py
-'''
-NEXT STEPS:
-[x] 1. Need to reformat further the shift_requests. remove 'array' and replace with [].  
-[x] 2. for now, concatenate all the groups to see if the program runs. I don't think you need to tweak anything
-[ ] 3. once the above works, start to section out into groups (maybe use a dictionary??) 
 
-
-
-
-'''
-
-# shift_requests = [[[0, 0, 1],
-#                    [0, 0, 0],
-#                    [0, 0, 0],
-#                    [0, 0, 0],
-#                    [0, 0, 1],
-#                    [0, 1, 0],
-#                    [0, 0, 1]],
-#                   [[0, 0, 0], [0, 0, 0], [0, 1, 0], [0, 1, 0], [1, 0, 0],
-#                    [0, 0, 0], [0, 0, 1]],
-#                   [[0, 1, 0], [0, 1, 0], [0, 0, 0], [1, 0, 0], [0, 0, 0],
-#                    [0, 1, 0], [0, 0, 0]],
-#                   [[0, 0, 1], [0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 0],
-#                    [1, 0, 0], [0, 0, 0]],
-#                   [[0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 0, 0], [1, 0, 0],
-#                    [0, 1, 0], [0, 0, 0]]]
-=======
->>>>>>> parent of cd290e6... Update PS - Interation 1.py
 
 #########################################################################################################
     #
@@ -91,7 +63,6 @@ NEXT STEPS:
     # else:
     #     print('true')
 
-<<<<<<< HEAD
 # ## If group_1 = 3,2 and group_2 = 5,2 and number of shift = 2
 # shift_requests = [[[0, 1, 0], [0, 1, 1],[0, 0, 0], [1, 1, 0], [0, 1, 0], [0, 1, 0]],
 #                       [[0, 0, 0], [1, 0, 0], [1, 1, 0], [0, 0, 0], [0, 1, 0]],
@@ -122,31 +93,15 @@ NEXT STEPS:
 #      [0, 0, 1, 0, 0, 0, 0, 0]]]
 
 
-def main():
-||||||| cd290e6... Update PS - Interation 1.py
-def main():
-=======
->>>>>>> parent of cd290e6... Update PS - Interation 1.py
-
 #########################################################################################################
     ## incorporating groups
 
     ## define agents and groups to create a matrix for shift_requests
     # [total_EEs_in_group, days_required]
 
-<<<<<<< HEAD
     group_1 = [3, 2]              # 2 full days
     group_2 = [2, 2]              # 1 full day and 2 half days
     # group_3    = [3, 2]            # 2 half days
-||||||| cd290e6... Update PS - Interation 1.py
-    group_1 = [3, 2]              # 2 full days
-    group_2 = [5, 2]              # 1 full day and 2 half days
-    # group_3 = [3, 2]            # 2 half days
-=======
-    group_1 = [3, 2]  # 2 full days
-    group_2 = [5, 2]  # 1 full day and 2 half days
-    # group_3 = [3, 2]            # 2 half days
->>>>>>> parent of cd290e6... Update PS - Interation 1.py
     # group_4 = [2, 2]            # 2 full days and 1 half day
     # group_5 = [2, 1]
 
@@ -215,7 +170,6 @@ def main():
     schedule_preference = np.concatenate((group_1_matrix,group_2_matrix)) # not correct - it needs to split and look like this (see below)
     print(schedule_preference)
 
-<<<<<<< HEAD
 ## DECLARING OTHER VARIABLES
 
     #num_nurses = group_1[0] + group_2[0]
@@ -232,48 +186,32 @@ def main():
                       [[0, 0, 0, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0], [0, 1, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 1, 0, 0, 0, 0, 0]],
                       [[0, 1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]]]
 
-||||||| cd290e6... Update PS - Interation 1.py
-## DECLARING OTHER VARIABLES
-
-    num_nurses = group_1[0] + group_2[0]
-    num_shifts = 2
-    num_days = 5
-    all_nurses = range(num_nurses)
-    all_shifts = range(num_shifts)
-    all_days = range(num_days)
-    #shift_requests = compiled_matrix
-    shift_requests = [[[0, 1], [0, 1], [1, 1], [0, 1], [0, 1]],
-                      [[0, 1], [1, 0], [1, 1], [0, 0], [0, 1]],
-                      [[1, 1], [0, 1], [0, 0], [0, 0], [0, 1]],
-                      [[0, 0], [1, 1], [1, 1], [0, 0], [1, 1]],
-                      [[1, 0], [1, 0], [0, 1], [0, 0], [0, 0]],
-                      [[1, 0], [0, 0], [0, 0], [1, 1], [1, 0]],
-                      [[0, 0], [0, 0], [0, 0], [1, 1], [0, 0]],
-                      [[1, 0], [1, 1], [0, 0], [0, 0], [0, 0]]]
-=======
-#np.concatenate((a, b), axis=0)
->>>>>>> parent of cd290e6... Update PS - Interation 1.py
-
-
-# shift_requests = [[[0, 0, 1], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 1],
-#                    [0, 1, 0], [0, 0, 1]],
-#                   [[0, 0, 0], [0, 0, 0], [0, 1, 0], [0, 1, 0], [1, 0, 0],
-#                    [0, 0, 0], [0, 0, 1]],
-#                   [[0, 1, 0], [0, 1, 0], [0, 0, 0], [1, 0, 0], [0, 0, 0],
-#                    [0, 1, 0], [0, 0, 0]],
-#                   [[0, 0, 1], [0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 0],
-#                    [1, 0, 0], [0, 0, 0]],
-#                   [[0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 0, 0], [1, 0, 0],
-#                    [0, 1, 0], [0, 0, 0]]]
-#
-
-
-
-
-
-
-
-<<<<<<< HEAD
+    
+    # Creates the model
+    model = cp_model.CpModel()
+    
+    # Creates shift variables
+    # shifts[(n, d, s)]: nurse 'n' works shift 's' on day 'd'.
+    
+    shifts = {}
+    for n in all_nurses:
+        for d in all_days:
+            for s in all_shifts:
+                shifts[(n, d,
+                        s)] = model.NewBoolVar('shift_n%id%is%i' % (n, d, s))
+    
+    # Each shift is assigned to exactly one nurse in .
+    for d in all_days:
+        for s in all_shifts:
+            model.Add(sum(shifts[(n, d, s)] for n in all_nurses) == 1)
+    
+    # Each nurse works at most one shift per day.
+    for n in all_nurses:
+        for d in all_days:
+            model.Add(sum(shifts[(n, d, s)] for s in all_shifts) <= 1)
+    
+    # min_shifts_assigned is the largest integer such that every nurse can be
+    # assigned at least that number of shifts.
     min_shifts_per_nurse = (num_shifts * num_days) // num_nurses
     max_shifts_per_nurse = min_shifts_per_nurse + 1
     for n in all_nurses:
@@ -281,94 +219,31 @@ def main():
             shifts[(n, d, s)] for d in all_days for s in all_shifts)
         model.Add(min_shifts_per_nurse <= num_shifts_worked)
         model.Add(num_shifts_worked <= max_shifts_per_nurse)
-||||||| cd290e6... Update PS - Interation 1.py
-    min_shifts_per_nurse = (num_shifts * num_days) // num_nurses                # min num of shifts = 1
-    max_shifts_per_nurse = min_shifts_per_nurse + 1                             # max num of shifts = 2
-    for n in all_nurses:
-        num_shifts_worked = sum(
-            shifts[(n, d, s)] for d in all_days for s in all_shifts)
-        model.Add(min_shifts_per_nurse <= num_shifts_worked)
-        model.Add(num_shifts_worked <= max_shifts_per_nurse)
-=======
->>>>>>> parent of cd290e6... Update PS - Interation 1.py
-
-
-
-#########################################################################################################
-
-    ## incorporate the preference into the schedule
-    # in this example let's use 8 employees
-
-    # num_nurses = group_1[0] + group_2[0]
-    # num_shifts = (group_1[0] * group_1[1]) + (group_2[0] * group_2[1]) # i think this makes sense but look into it again when you're fully awake
-    # num_days = 5
-    # all_nurses = range(num_nurses)
-    # all_shifts = range(num_shifts)
-    # all_days = range(num_days)
-    # #shift_requests
-    #
-    # print(num_nurses)
-    # print(num_shifts)
-
-
-    #
-    # # Creates the model
-    # model = cp_model.CpModel()
-    #
-    # # Creates shift variables
-    # # shifts[(n, d, s)]: nurse 'n' works shift 's' on day 'd'.
-    #
-    # shifts = {}
-    # for n in all_nurses:
-    #     for d in all_days:
-    #         for s in all_shifts:
-    #             shifts[(n, d,
-    #                     s)] = model.NewBoolVar('shift_n%id%is%i' % (n, d, s))
-    #
-    # # Each shift is assigned to exactly one nurse in .
-    # for d in all_days:
-    #     for s in all_shifts:
-    #         model.Add(sum(shifts[(n, d, s)] for n in all_nurses) == 1)
-    #
-    # # Each nurse works at most one shift per day.
-    # for n in all_nurses:
-    #     for d in all_days:
-    #         model.Add(sum(shifts[(n, d, s)] for s in all_shifts) <= 1)
-    #
-    # # min_shifts_assigned is the largest integer such that every nurse can be
-    # # assigned at least that number of shifts.
-    # min_shifts_per_nurse = (num_shifts * num_days) // num_nurses
-    # max_shifts_per_nurse = min_shifts_per_nurse + 1
-    # for n in all_nurses:
-    #     num_shifts_worked = sum(
-    #         shifts[(n, d, s)] for d in all_days for s in all_shifts)
-    #     model.Add(min_shifts_per_nurse <= num_shifts_worked)
-    #     model.Add(num_shifts_worked <= max_shifts_per_nurse)
-    #
-    # model.Maximize(
-    #     sum(shift_requests[n][d][s] * shifts[(n, d, s)] for n in all_nurses
-    #         for d in all_days for s in all_shifts))
-    # # Creates the solver and solve.
-    # solver = cp_model.CpSolver()
-    # solver.Solve(model)
-    # for d in all_days:
-    #     print('Day', d)
-    #     for n in all_nurses:
-    #         for s in all_shifts:
-    #             if solver.Value(shifts[(n, d, s)]) == 1:
-    #                 if shift_requests[n][d][s] == 1:
-    #                     print('Nurse', n, 'works shift', s, '(requested).')
-    #                 else:
-    #                     print('Nurse', n, 'works shift', s, '(not requested).')
-    #     print()
-    #
-    # # Statistics.
-    # print()
-    # print('Statistics')
-    # print('  - Number of shift requests met = %i' % solver.ObjectiveValue(),
-    #       '(out of', num_nurses * min_shifts_per_nurse, ')')
-    # print('  - wall time       : %f s' % solver.WallTime())
-    #
+    
+    model.Maximize(
+        sum(shift_requests[n][d][s] * shifts[(n, d, s)] for n in all_nurses
+            for d in all_days for s in all_shifts))
+    # Creates the solver and solve.
+    solver = cp_model.CpSolver()
+    solver.Solve(model)
+    for d in all_days:
+        print('Day', d)
+        for n in all_nurses:
+            for s in all_shifts:
+                if solver.Value(shifts[(n, d, s)]) == 1:
+                    if shift_requests[n][d][s] == 1:
+                        print('Nurse', n, 'works shift', s, '(requested).')
+                    else:
+                        print('Nurse', n, 'works shift', s, '(not requested).')
+        print()
+    
+    # Statistics.
+    print()
+    print('Statistics')
+    print('  - Number of shift requests met = %i' % solver.ObjectiveValue(),
+          '(out of', num_nurses * min_shifts_per_nurse, ')')
+    print('  - wall time       : %f s' % solver.WallTime())
+    
 
 if __name__ == '__main__':
     main()
