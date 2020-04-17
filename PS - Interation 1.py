@@ -2,7 +2,6 @@ from __future__ import print_function
 from ortools.sat.python import cp_model
 import numpy as np
 
-
 '''
 NEXT STEPS:
 [x] 1. Need to reformat further the shift_requests. remove 'array' and replace with [].  
@@ -16,8 +15,10 @@ NEXT STEPS:
     Minimum - (num of shifts * num of days) / num of agents available
     Maximum - Minimum + 1 shift
 5. 
- 
+
 '''
+
+
 # ## SAMPLE
 # shift_requests = [[[0, 0, 1],
 #                    [0, 0, 0],
@@ -63,23 +64,21 @@ NEXT STEPS:
 #     [[1, 0, 1, 0, 0, 0, 0, 0], [1, 1, 1, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0],
 #      [0, 0, 1, 0, 0, 0, 0, 0]]]
 
-
 def main():
 
-#########################################################################################################
+    #########################################################################################################
     ## incorporating groups
 
     ## define agents and groups to create a matrix for shift_requests
     # [total_EEs_in_group, days_required]
 
-    group_1 = [3, 2]              # 2 full days
-    group_2 = [2, 2]              # 1 full day and 2 half days
+    group_1 = [3, 2]  # 2 full days
+    group_2 = [2, 2]  # 1 full day and 2 half days
     # group_3    = [3, 2]            # 2 half days
     # group_4 = [2, 2]            # 2 full days and 1 half day
     # group_5 = [2, 1]
 
-
-    #creating matrices - we can create a function later!
+    # creating matrices - we can create a function later!
     ## creating matrices - we can create a function later!
     # def create_matrix(i):
     #     group_i_matrix = []
@@ -93,75 +92,94 @@ def main():
     #
     # create_matrix(i = 1)
 
-
     group_1_matrix = []
 
     for x in range(group_1[0]):
-        matrix = np.random.random_integers(0, 1, size=(5, 2))
         matrix = np.random.randint(0, 2, size=(5, 2))
         group_1_matrix.append(matrix)
 
     group_1_matrix = np.vstack(group_1_matrix)
-    print(group_1_matrix)
     #print(group_1_matrix)
-
 
     group_2_matrix = []
 
     for x in range(group_2[0]):
-        matrix = np.random.random_integers(0, 1, size=(5, 2))
         matrix = np.random.randint(0, 2, size=(5, 2))
         group_2_matrix.append(matrix)
 
     group_2_matrix = np.vstack(group_2_matrix)
-    print(group_2_matrix)
-    #print(group_2_matrix)
-
+    # print(group_2_matrix)
 
     ## declaring constraints - can make this into a function as well
+
+    group_1_conversion = np.where(group_1_matrix < 1, 0.5, 1)
+    group_2_conversion = np.where(group_2_matrix < 1, 0.5, 1)
+
     total_hours_group_1 = sum(sum(group_1_conversion))
     total_hours_group_2 = sum(sum(group_2_conversion))
 
-    print(group_1_conversion)
-    print(total_hours_group_1)
-    #print(group_1_conversion)
-    #print(total_hours_group_1)
+    # print(group_1_conversion)
+    # print(total_hours_group_1)
 
     # days_req conditions
     days_required_group_1 = group_1[0] * group_1[1]
+    days_required_group_2 = group_2[0] * group_2[1]
+
+    if total_hours_group_1 < days_required_group_1:
+        print("error")
+    else:
+        print('true')
+
+    if total_hours_group_2 < days_required_group_2:
+        print("error")
+    else:
+        print('true')
+
 
     # compile all the matrices
     schedule_preference = np.concatenate((group_1_matrix,group_2_matrix)) # not correct - it needs to split and look like this (see below)
     print(schedule_preference)
 
-    ## incorporate the preference into the schedule
 
-## DECLARING OTHER VARIABLES
+    ## DECLARING OTHER VARIABLES
 
-    #num_nurses = group_1[0] + group_2[0]
     num_nurses = 5
     num_shifts = 3
-    num_days = 7
-    num_shifts = 8
     num_days = 5
     all_nurses = range(num_nurses)
     all_shifts = range(num_shifts)
     all_days = range(num_days)
-    # shift_requests = (include matrices for group1 and group2)
-    #shift_requests = compiled_matrix
-    shift_requests = [[[0, 1, 0, 0, 0, 0, 0, 0], [0, 1, 1, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0]],
-                      [[0, 0, 0, 0, 0, 0, 0, 0], [1, 0, 0, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0]],
-                      [[1, 1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0]],
-                      [[0, 0, 0, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0], [0, 1, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 1, 0, 0, 0, 0, 0]],
-                      [[0, 1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]]]
+    # shift_requests = compiled_matrix
+    shift_requests = [[[0, 0, 1], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 1],
+      [0, 1, 0], [0, 0, 1]],
+     [[0, 0, 0], [0, 0, 0], [0, 1, 0], [0, 1, 0], [1, 0, 0],
+      [0, 0, 0], [0, 0, 1]],
+     [[0, 1, 0], [0, 1, 0], [0, 0, 0], [1, 0, 0], [0, 0, 0],
+      [0, 1, 0], [0, 0, 0]],
+     [[0, 0, 1], [0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 0],
+      [1, 0, 0], [0, 0, 0]],
+     [[0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 0, 0], [1, 0, 0],
+      [0, 1, 0], [0, 0, 0]]]
+
+    # [
+    #     [[0, 1, 0, 0, 0, 0, 0, 0], [0, 1, 1, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0],
+    #      [0, 1, 0, 0, 0, 0, 0, 0]],
+    #     [[0, 0, 0, 0, 0, 0, 0, 0], [1, 0, 0, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0],
+    #      [0, 1, 0, 0, 0, 0, 0, 0]],
+    #     [[1, 1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0],
+    #      [0, 1, 0, 0, 0, 0, 0, 0]],
+    #     [[0, 0, 0, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0], [0, 1, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0],
+    #      [0, 1, 1, 0, 0, 0, 0, 0]],
+    #     [[0, 1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0],
+    #      [0, 0, 0, 0, 0, 0, 0, 0]]]
 
 
-    # Creates the model
+
+# Creates the model.
     model = cp_model.CpModel()
 
-    # Creates shift variables
+    # Creates shift variables.
     # shifts[(n, d, s)]: nurse 'n' works shift 's' on day 'd'.
-
     shifts = {}
     for n in all_nurses:
         for d in all_days:
@@ -181,7 +199,6 @@ def main():
 
     # min_shifts_assigned is the largest integer such that every nurse can be
     # assigned at least that number of shifts.
-
     min_shifts_per_nurse = (num_shifts * num_days) // num_nurses
     max_shifts_per_nurse = min_shifts_per_nurse + 1
     for n in all_nurses:
@@ -189,7 +206,7 @@ def main():
             shifts[(n, d, s)] for d in all_days for s in all_shifts)
         model.Add(min_shifts_per_nurse <= num_shifts_worked)
         model.Add(num_shifts_worked <= max_shifts_per_nurse)
-        
+
     model.Maximize(
         sum(shift_requests[n][d][s] * shifts[(n, d, s)] for n in all_nurses
             for d in all_days for s in all_shifts))
@@ -214,5 +231,6 @@ def main():
           '(out of', num_nurses * min_shifts_per_nurse, ')')
     print('  - wall time       : %f s' % solver.WallTime())
 
+
 if __name__ == '__main__':
-    main() 
+    main()
