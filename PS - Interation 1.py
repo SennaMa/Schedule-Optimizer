@@ -7,14 +7,21 @@ import numpy as np
 '''
 NEXT STEPS:
 [x] 1. Need to reformat further the shift_requests. remove 'array' and replace with [].  
-[x] 2. for now, concatenate all the groups to see if the program runs. I don't think you need to tweak anything
-[ ] 3. once the above works, start to section out into groups (maybe use a dictionary??) 
+[x] 2. For now, concatenate all the groups to see if the program runs. I don't think you need to tweak anything
+[ ] 3. Do we need to update the matrix so we can change number of shifts? Or is there a way for us to update min_num_shifts? 
+[ ] 4. Once the above works, start to section out into groups (maybe use a dictionary??) 
 
-
-
+1. Decide how many hours are required by week. 
+2. How many shifts per day then? 
+3. How many agents are available?               <- once this gets complicated, we can determine how many hours are required per agent  
+4. Assuming equally spread out, how many shifts per agent? 
+    Minimum - (num of shifts * num of days) / num of agents available
+    Maximum - Minimum + 1 shift
+5. 
+ 
 
 '''
-
+# ## SAMPLE
 # shift_requests = [[[0, 0, 1],
 #                    [0, 0, 0],
 #                    [0, 0, 0],
@@ -32,6 +39,36 @@ NEXT STEPS:
 #                    [0, 1, 0], [0, 0, 0]]]
 
 
+# ## If group_1 = 3,2 and group_2 = 5,2 and number of shift = 2
+# shift_requests = [[[0, 1, 0], [0, 1, 1],[0, 0, 0], [1, 1, 0], [0, 1, 0], [0, 1, 0]],
+#                       [[0, 0, 0], [1, 0, 0], [1, 1, 0], [0, 0, 0], [0, 1, 0]],
+#                       [[1, 1, 0], [0, 1, 0], [0, 0, 0], [0, 0, 0], [0, 1, 0]],
+#                       [[0, 0, 0], [1, 1, 0], [0, 1, 1], [0, 0, 0], [0, 1, 1]],
+#                       [[0, 1, 0], [0, 1, 0], [0, 0, 1], [0, 0, 0], [0, 0, 0]],
+#                       [[0, 1, 0], [0, 0, 0], [0, 0, 0], [0, 1, 1], [0, 1, 0]],
+#                       [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 1, 1], [0, 0, 0]],
+#                       [[1, 0, 1], [1, 1, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1]]]
+
+
+# shift_requests = [
+#     [[0, 1, 0, 0, 0, 0, 0, 0], [0, 1, 1, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0],
+#      [0, 1, 0, 0, 0, 0, 0, 0]],
+#     [[0, 0, 0, 0, 0, 0, 0, 0], [1, 0, 0, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0],
+#      [0, 1, 0, 0, 0, 0, 0, 0]],
+#     [[1, 1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0],
+#      [0, 1, 0, 0, 0, 0, 0, 0]],
+#     [[0, 0, 0, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0], [0, 1, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0],
+#      [0, 1, 1, 0, 0, 0, 0, 0]],
+#     [[0, 1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0],
+#      [0, 0, 0, 0, 0, 0, 0, 0]],
+#     [[0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 1, 0, 0, 0, 0, 0],
+#      [0, 1, 0, 0, 0, 0, 0, 0]],
+#     [[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 1, 0, 0, 0, 0, 0],
+#      [0, 0, 0, 0, 0, 0, 0, 0]],
+#     [[1, 0, 1, 0, 0, 0, 0, 0], [1, 1, 1, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0],
+#      [0, 0, 1, 0, 0, 0, 0, 0]]]
+
+
 def main():
 
 #########################################################################################################
@@ -40,8 +77,8 @@ def main():
 # [total_EEs_in_group, days_required]
 
     group_1 = [3, 2]              # 2 full days
-    group_2 = [5, 2]              # 1 full day and 2 half days
-    # group_3 = [3, 2]            # 2 half days
+    group_2 = [2, 2]              # 1 full day and 2 half days
+    # group_3    = [3, 2]            # 2 half days
     # group_4 = [2, 2]            # 2 full days and 1 half day
     # group_5 = [2, 1]
 
@@ -105,21 +142,20 @@ def main():
 
 ## DECLARING OTHER VARIABLES
 
-    num_nurses = group_1[0] + group_2[0]
-    num_shifts = 2
+    #num_nurses = group_1[0] + group_2[0]
+    num_nurses = 5
+    num_shifts = 8
     num_days = 5
     all_nurses = range(num_nurses)
     all_shifts = range(num_shifts)
     all_days = range(num_days)
     #shift_requests = compiled_matrix
-    shift_requests = [[[0, 1], [0, 1], [1, 1], [0, 1], [0, 1]],
-                      [[0, 1], [1, 0], [1, 1], [0, 0], [0, 1]],
-                      [[1, 1], [0, 1], [0, 0], [0, 0], [0, 1]],
-                      [[0, 0], [1, 1], [1, 1], [0, 0], [1, 1]],
-                      [[1, 0], [1, 0], [0, 1], [0, 0], [0, 0]],
-                      [[1, 0], [0, 0], [0, 0], [1, 1], [1, 0]],
-                      [[0, 0], [0, 0], [0, 0], [1, 1], [0, 0]],
-                      [[1, 0], [1, 1], [0, 0], [0, 0], [0, 0]]]
+    shift_requests = [[[0, 1, 0, 0, 0, 0, 0, 0], [0, 1, 1, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0]],
+                      [[0, 0, 0, 0, 0, 0, 0, 0], [1, 0, 0, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0]],
+                      [[1, 1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0]],
+                      [[0, 0, 0, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0], [0, 1, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 1, 0, 0, 0, 0, 0]],
+                      [[0, 1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]]]
+
 
 #########################################################################################################
 
@@ -149,8 +185,8 @@ def main():
 
     # min_shifts_assigned is the largest integer such that every nurse can be assigned at least that number of shifts.
 
-    min_shifts_per_nurse = (num_shifts * num_days) // num_nurses                # min num of shifts = 1
-    max_shifts_per_nurse = min_shifts_per_nurse + 1                             # max num of shifts = 2
+    min_shifts_per_nurse = (num_shifts * num_days) // num_nurses
+    max_shifts_per_nurse = min_shifts_per_nurse + 1
     for n in all_nurses:
         num_shifts_worked = sum(
             shifts[(n, d, s)] for d in all_days for s in all_shifts)
