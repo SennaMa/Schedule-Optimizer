@@ -5,7 +5,6 @@ import numpy as np
 
 def main():
 
-<<<<<<< HEAD
 '''
 NEXT STEPS:
 [x] 1. Need to reformat further the shift_requests. remove 'array' and replace with [].  
