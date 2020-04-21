@@ -8,7 +8,7 @@ NEXT STEPS:
 [x] 2. For now, concatenate all the groups to see if the program runs. I don't think you need to tweak anything
 [ ] 3. Convert groups into classes. this will make your code easier to interpret 
 [ ] 4. Do we need to update the matrix so we can change number of shifts? Or is there a way for us to update min_num_shifts?
-  
+
 
 1. Decide how many hours are required by week. 
 2. How many shifts per day then? 
@@ -79,15 +79,15 @@ class nurse():   # input agent details (ie. name, hours required, shift preferen
         self.thurs = [shift_preference[3]]
         self.fri = [shift_preference[4]]
         self.total_shift = [self.mon,self.tues,self.wed,self.thurs,self.fri]
-
+    
     def set_shift(self, x):
         self.shift_preference = x
         self.total_shift = x
-
+    
     # pulls the entire list of shift preferences
     def get_shift(self):
         print(self.total_shift)
-
+    
     # only pulls the requested shift preference as a numerical value
     def shift_interpreter_num(self,index1):
         print(self.total_shift[index1])
@@ -106,7 +106,7 @@ class nurse():   # input agent details (ie. name, hours required, shift preferen
             print('Thursday')
         elif index1 == 4:
             print('Friday')
-
+    
     # pulls the preference (full or half)
     def get_preference(self,index1):
         print(self.total_shift[index1])
