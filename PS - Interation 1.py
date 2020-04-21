@@ -67,7 +67,7 @@ NEXT STEPS:
 
 # incorporating classes
 
-class nurse():   # input agent details (ie. name, hours required, shift preference)
+class Nurse():   # input agent details (ie. name, hours required, shift preference)
 
     def __init__(self,name,hours_required,shift_preference):
         self.name = name
@@ -87,7 +87,8 @@ class nurse():   # input agent details (ie. name, hours required, shift preferen
     # pulls the entire list of shift preferences
     def get_shift(self):
         print(self.total_shift)
-    
+        return self.total_shift
+
     # only pulls the requested shift preference as a numerical value
     def shift_interpreter_num(self,index1):
         print(self.total_shift[index1])
@@ -95,7 +96,7 @@ class nurse():   # input agent details (ie. name, hours required, shift preferen
 
     # pulls the requested shift as a day
     def get_date(self,index1):
-        self.total_shift[index1]
+        print(self.total_shift[index1])
         if index1 == 0:
             print('Monday')
         elif index1 == 1:
@@ -106,10 +107,12 @@ class nurse():   # input agent details (ie. name, hours required, shift preferen
             print('Thursday')
         elif index1 == 4:
             print('Friday')
+        return self.total_shift[index1]
     
     # pulls the preference (full or half)
     def get_preference(self,index1):
         print(self.total_shift[index1])
+
         def full_or_half():
             if self.total_shift[index1] == [0, 1]:
                 print("Half")
@@ -120,114 +123,131 @@ class nurse():   # input agent details (ie. name, hours required, shift preferen
         return full_or_half()
 
 
-# entering agents in class nurse(). we can build a function that populates this list
-nurse0 = nurse("Senna",2,([[0,1],[0,0],[0,0],[0,0],[0,0]]))
+# # entering agents in class nurse(). we can build a function that populates this list
+# nurse0 = Nurse("Senna",2,([[0,1],[0,0],[0,0],[0,0],[0,0]]))
+#
+# print(nurse0.shift_preference)
+# print(nurse0.fri)                                         # prints schedule pref on Friday based on a string
+# nurse0.shift_interpreter_num(4)                           # prints schedule pref on Friday based on an integer
+#
+# nurse0.set_shift([[0,1],[0,0],[0,0],[0,0],[0,1]])         # changes schedule pref for Nurse0
+# nurse0.get_shift()                                        # retrieves and prints the new shift
+#
+# nurse0.get_date(4)                                        # retrieves the date you're looking for
+# nurse0.get_preference(4)                                  # retrieve preference on Friday (works the half day)
 
-print(nurse0.shift_preference)
-print(nurse0.fri)                                         # prints schedule pref on Friday based on a string
-nurse0.shift_interpreter_num(4)                           # prints schedule pref on Friday based on an integer
 
-nurse0.set_shift([[0,1],[0,0],[0,0],[0,0],[0,1]])         # changes schedule pref for Nurse0
-nurse0.get_shift()                                        # retrieves and prints the new shift
+def main():
 
-nurse0.get_date(4)                                        # retrieves the date you're looking for
-nurse0.get_preference(4)                                  # retrieve preference on Friday (works the half day)
+# PUTTING THE IDEA OF GROUPS ON PAUSE. May revisit later
+    # group_1 = [3, 2]  # 2 full days
+    # group_2 = [2, 2]  # 1 full day and 2 half days
+    # # group_3    = [3, 2]            # 2 half days
+    # # group_4 = [2, 2]            # 2 full days and 1 half day
+    # # group_5 = [2, 1]
+    #
+    #
+    # group_1_matrix = []
+    #
+    # for x in range(group_1[0]):
+    #     matrix = np.random.randint(0, 2, size=(5, 2))
+    #     group_1_matrix.append(matrix)
+    #
+    # group_1_matrix = np.vstack(group_1_matrix)
+    # #print(group_1_matrix)
+    #
+    # group_2_matrix = []
+    #
+    # for x in range(group_2[0]):
+    #     matrix = np.random.randint(0, 2, size=(5, 2))
+    #     group_2_matrix.append(matrix)
+    #
+    # group_2_matrix = np.vstack(group_2_matrix)
+    # # print(group_2_matrix)
+
+    ## declaring constraints - can make this into a function as well
+
+    # group_1_conversion = np.where(group_1_matrix < 1, 0.5, 1)
+    # group_2_conversion = np.where(group_2_matrix < 1, 0.5, 1)
+    #
+    # total_hours_group_1 = sum(sum(group_1_conversion))
+    # total_hours_group_2 = sum(sum(group_2_conversion))
+    #
+    # # print(group_1_conversion)
+    # # print(total_hours_group_1)
+    #
+    # # days_req conditions
+    # days_required_group_1 = group_1[0] * group_1[1]
+    # days_required_group_2 = group_2[0] * group_2[1]
+    #
+    # if total_hours_group_1 < days_required_group_1:
+    #     print("error")
+    # else:
+    #     print('true')
+    #
+    # if total_hours_group_2 < days_required_group_2:
+    #     print("error")
+    # else:
+    #     print('true')
 
 
-#
-#
-# def main():
-#
-#     group_1 = [3, 2]  # 2 full days
-#     group_2 = [2, 2]  # 1 full day and 2 half days
-#     # group_3    = [3, 2]            # 2 half days
-#     # group_4 = [2, 2]            # 2 full days and 1 half day
-#     # group_5 = [2, 1]
-#
-#     # creating matrices - we can create a function later!
-#     ## creating matrices - we can create a function later!
-#     # def create_matrix(i):
-#     #     group_i_matrix = []
-#     #     for x in range(group_i[0]):
-#     #         matrix = np.random.randint(0, 2, size=(5,2)) # 5 days and 2 types of shifts
-#     #         group_i_matrix.append(matrix)
-#     #     return
-#     #
-#     #     group_i_matrix = np.vstack(group_i_matrix)
-#     #     print(group_i_matrix)
-#     #
-#     # create_matrix(i = 1)
-#
-#     group_1_matrix = []
-#
-#     for x in range(group_1[0]):
-#         matrix = np.random.randint(0, 2, size=(5, 2))
-#         group_1_matrix.append(matrix)
-#
-#     group_1_matrix = np.vstack(group_1_matrix)
-#     #print(group_1_matrix)
-#
-#     group_2_matrix = []
-#
-#     for x in range(group_2[0]):
-#         matrix = np.random.randint(0, 2, size=(5, 2))
-#         group_2_matrix.append(matrix)
-#
-#     group_2_matrix = np.vstack(group_2_matrix)
-#     # print(group_2_matrix)
-#
-#     ## declaring constraints - can make this into a function as well
-#
-#     group_1_conversion = np.where(group_1_matrix < 1, 0.5, 1)
-#     group_2_conversion = np.where(group_2_matrix < 1, 0.5, 1)
-#
-#     total_hours_group_1 = sum(sum(group_1_conversion))
-#     total_hours_group_2 = sum(sum(group_2_conversion))
-#
-#     # print(group_1_conversion)
-#     # print(total_hours_group_1)
-#
-#     # days_req conditions
-#     days_required_group_1 = group_1[0] * group_1[1]
-#     days_required_group_2 = group_2[0] * group_2[1]
-#
-#     if total_hours_group_1 < days_required_group_1:
-#         print("error")
-#     else:
-#         print('true')
-#
-#     if total_hours_group_2 < days_required_group_2:
-#         print("error")
-#     else:
-#         print('true')
-#
-#
-#     # compile all the matrices
-#     schedule_preference = np.concatenate((group_1_matrix,group_2_matrix)) # not correct - it needs to split and look like this (see below)
-#     #print(schedule_preference)
-#
-#
-#     ## DECLARING OTHER VARIABLES
-#
-#     num_nurses = 5
-#     num_shifts = 2
-#     num_days = 5
-#     all_nurses = range(num_nurses)
-#     all_shifts = range(num_shifts)
-#     all_days = range(num_days)
-#     # shift_requests = compiled_matrix
-#     shift_requests = [[[0, 1], [0, 1], [0, 0], [0, 1],
-#          [0, 1]],
-#         [[0, 0], [1, 0], [1, 0], [0, 0],
-#          [0, 1]],
-#         [[1, 0], [0, 1], [0, 0], [0, 0],
-#          [0, 1]],
-#         [[0, 0], [1, 0], [0, 1], [0, 0],
-#          [0, 1]],
-#         [[0, 1], [0, 1], [0, 0], [0, 0],
-#          [0, 0]]]
-#
-#
+## In our example we're going to have five agents with different schedule preferences
+# Declaring agents with random matrices
+
+    nurse0 = Nurse("Senna",2,([[0,1],[0,0],[0,0],[0,0],[0,0]]))
+    nurse1 = Nurse("Josh",2,([[0,0],[0,0],[0,0],[0,0],[0,0]]))
+    nurse2 = Nurse("Nina",2,([[0,1],[1,0],[0,0],[1,0],[1,0]]))
+    nurse3 = Nurse("Christine",2,([[1,0],[0,0],[0,0],[0,0],[0,1]]))
+    nurse4 = Nurse("Niccoh",2,([[0,1],[0,1],[0,1],[0,1],[0,0]]))
+
+
+## next steps: work on getting the check to work. it looks like TypeError: '<' not supported between instances of 'list' and 'int'
+# checks to see if list = hours_required
+
+
+
+    print(nurse0.shift_preference)
+    group_1_conversion = np.where(nurse0.shift_preference < 1, 0.5, 1)
+    total_hours_group_1 = sum(sum(group_1_conversion))
+
+    print(group_1_conversion)
+    print(total_hours_group_1)
+
+    # days_req conditions
+    days_required_group_1 = nurse0.hours_required
+
+    if total_hours_group_1 < days_required_group_1:
+        print("error")
+    else:
+        print('true')
+
+    #
+    # # compile all the matrices
+    # schedule_preference = np.concatenate((group_1_matrix,group_2_matrix)) # not correct - it needs to split and look like this (see below)
+    # #print(schedule_preference)
+    #
+    #
+    # ## DECLARING OTHER VARIABLES
+    #
+    # num_nurses = 5
+    # num_shifts = 2
+    # num_days = 5
+    # all_nurses = range(num_nurses)
+    # all_shifts = range(num_shifts)
+    # all_days = range(num_days)
+    # # shift_requests = compiled_matrix
+    # shift_requests = [[[0, 1], [0, 1], [0, 0], [0, 1],
+    #      [0, 1]],
+    #     [[0, 0], [1, 0], [1, 0], [0, 0],
+    #      [0, 1]],
+    #     [[1, 0], [0, 1], [0, 0], [0, 0],
+    #      [0, 1]],
+    #     [[0, 0], [1, 0], [0, 1], [0, 0],
+    #      [0, 1]],
+    #     [[0, 1], [0, 1], [0, 0], [0, 0],
+    #      [0, 0]]]
+
+
 #
 # # Creates the model.
 #     model = cp_model.CpModel()
@@ -286,5 +306,5 @@ nurse0.get_preference(4)                                  # retrieve preference 
 #     print('  - wall time       : %f s' % solver.WallTime())
 #
 #
-# if __name__ == '__main__':
-#     main()
+if __name__ == '__main__':
+    main()
