@@ -2,68 +2,12 @@ from __future__ import print_function
 from ortools.sat.python import cp_model
 import numpy as np
 
-'''
-NEXT STEPS:
-[x] 1. Need to reformat further the shift_requests. remove 'array' and replace with [].  
-[x] 2. For now, concatenate all the groups to see if the program runs. I don't think you need to tweak anything
-[ ] 3. Convert groups into classes. this will make your code easier to interpret 
-[ ] 4. Do we need to update the matrix so we can change number of shifts? Or is there a way for us to update min_num_shifts?
-
-
-1. Decide how many hours are required by week. 
-2. How many shifts per day then? 
-3. How many agents are available?               <- once this gets complicated, we can determine how many hours are required per agent  
-4. Assuming equally spread out, how many shifts per agent? 
-    Minimum - (num of shifts * num of days) / num of agents available
-    Maximum - Minimum + 1 shift
-5. 
-'''
-
 
 # ## SAMPLE
-# shift_requests = [[[0, 0, 1],
-#                    [0, 0, 0],
-#                    [0, 0, 0],
-#                    [0, 0, 0],
-#                    [0, 0, 1],
-#                    [0, 1, 0],
-#                    [0, 0, 1]],
-#                   [[0, 0, 0], [0, 0, 0], [0, 1, 0], [0, 1, 0], [1, 0, 0],
-#                    [0, 0, 0], [0, 0, 1]],
-#                   [[0, 1, 0], [0, 1, 0], [0, 0, 0], [1, 0, 0], [0, 0, 0],
-#                    [0, 1, 0], [0, 0, 0]],
-#                   [[0, 0, 1], [0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 0],
-#                    [1, 0, 0], [0, 0, 0]],
-#                   [[0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 0, 0], [1, 0, 0],
-#                    [0, 1, 0], [0, 0, 0]]]
 
-# ## If group_1 = 3,2 and group_2 = 5,2 and number of shift = 2
-# shift_requests = [[[0, 1, 0], [0, 1, 1],[0, 0, 0], [1, 1, 0], [0, 1, 0], [0, 1, 0]],
-#                       [[0, 0, 0], [1, 0, 0], [1, 1, 0], [0, 0, 0], [0, 1, 0]],
-#                       [[1, 1, 0], [0, 1, 0], [0, 0, 0], [0, 0, 0], [0, 1, 0]],
-#                       [[0, 0, 0], [1, 1, 0], [0, 1, 1], [0, 0, 0], [0, 1, 1]],
-#                       [[0, 1, 0], [0, 1, 0], [0, 0, 1], [0, 0, 0], [0, 0, 0]],
-#                       [[0, 1, 0], [0, 0, 0], [0, 0, 0], [0, 1, 1], [0, 1, 0]],
-#                       [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 1, 1], [0, 0, 0]],
-#                       [[1, 0, 1], [1, 1, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1]]]
-
-# shift_requests = [
-#     [[0, 1, 0, 0, 0, 0, 0, 0], [0, 1, 1, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0],
-#      [0, 1, 0, 0, 0, 0, 0, 0]],
-#     [[0, 0, 0, 0, 0, 0, 0, 0], [1, 0, 0, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0],
-#      [0, 1, 0, 0, 0, 0, 0, 0]],
-#     [[1, 1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0],
-#      [0, 1, 0, 0, 0, 0, 0, 0]],
-#     [[0, 0, 0, 0, 0, 0, 0, 0], [1, 1, 0, 0, 0, 0, 0, 0], [0, 1, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0],
-#      [0, 1, 1, 0, 0, 0, 0, 0]],
-#     [[0, 1, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0],
-#      [0, 0, 0, 0, 0, 0, 0, 0]],
-#     [[0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 1, 0, 0, 0, 0, 0],
-#      [0, 1, 0, 0, 0, 0, 0, 0]],
-#     [[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 1, 0, 0, 0, 0, 0],
-#      [0, 0, 0, 0, 0, 0, 0, 0]],
-#     [[1, 0, 1, 0, 0, 0, 0, 0], [1, 1, 1, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0],
-#      [0, 0, 1, 0, 0, 0, 0, 0]]]
+# After speaking with Kiss, we should add the following fields:
+# [ ] French vs English agent
+# [ ] Available days
 
 
 
@@ -135,60 +79,7 @@ class Nurse():   # input agent details (ie. name, hours required, shift preferen
 # nurse0.get_date(4)                                        # retrieves the date you're looking for
 # nurse0.get_preference(4)                                  # retrieve preference on Friday (works the half day)
 
-
-def main():
-
-# PUTTING THE IDEA OF GROUPS ON PAUSE. May revisit later
-    # group_1 = [3, 2]  # 2 full days
-    # group_2 = [2, 2]  # 1 full day and 2 half days
-    # # group_3    = [3, 2]            # 2 half days
-    # # group_4 = [2, 2]            # 2 full days and 1 half day
-    # # group_5 = [2, 1]
-    #
-    #
-    # group_1_matrix = []
-    #
-    # for x in range(group_1[0]):
-    #     matrix = np.random.randint(0, 2, size=(5, 2))
-    #     group_1_matrix.append(matrix)
-    #
-    # group_1_matrix = np.vstack(group_1_matrix)
-    # #print(group_1_matrix)
-    #
-    # group_2_matrix = []
-    #
-    # for x in range(group_2[0]):
-    #     matrix = np.random.randint(0, 2, size=(5, 2))
-    #     group_2_matrix.append(matrix)
-    #
-    # group_2_matrix = np.vstack(group_2_matrix)
-    # # print(group_2_matrix)
-
-    ## declaring constraints - can make this into a function as well
-
-    # group_1_conversion = np.where(group_1_matrix < 1, 0.5, 1)
-    # group_2_conversion = np.where(group_2_matrix < 1, 0.5, 1)
-    #
-    # total_hours_group_1 = sum(sum(group_1_conversion))
-    # total_hours_group_2 = sum(sum(group_2_conversion))
-    #
-    # # print(group_1_conversion)
-    # # print(total_hours_group_1)
-    #
-    # # days_req conditions
-    # days_required_group_1 = group_1[0] * group_1[1]
-    # days_required_group_2 = group_2[0] * group_2[1]
-    #
-    # if total_hours_group_1 < days_required_group_1:
-    #     print("error")
-    # else:
-    #     print('true')
-    #
-    # if total_hours_group_2 < days_required_group_2:
-    #     print("error")
-    # else:
-    #     print('true')
-
+'''
 
 ## In our example we're going to have five agents with different schedule preferences
 # Declaring agents with random matrices
@@ -205,16 +96,11 @@ def main():
     nurse9 = Nurse("Bob4",2,([[0,1],[0,1],[0,1],[0,1],[0,0]]))
 
 
-
-
-
 # checks to see if schedule requests meets hours_required per agent
 
     nurse0_num_of_requested_hours = 0
     for days in nurse0.shift_preference:
-        if days == [0, 1]:
-            nurse0_num_of_requested_hours += 0.5
-        elif days == [1, 0]:
+        if days == [0, 1] or days == [1,0]:
             nurse0_num_of_requested_hours += 1
         elif days == [0, 0]:
             nurse0_num_of_requested_hours += 0
@@ -229,22 +115,22 @@ def main():
 
 ## DECLARING OTHER VARIABLES
 
-    num_nurses = 10
-    num_shifts = 8
-    num_days = 5
+    num_nurses = 4
+    num_shifts = 3
+    num_days = 3
     all_nurses = range(num_nurses)
     all_shifts = range(num_shifts)
     all_days = range(num_days)
-    shift_requests = [[[1, 0], [0, 0], [0, 0], [1, 0], [0, 0]],
-                      [[0, 0], [1, 0], [0, 0], [0, 0], [1, 0]],
-                      [[0, 0], [1, 0], [1, 0], [0, 0], [0, 0]],
-                      [[1, 0], [0, 0], [0, 0], [1, 0], [0, 0]],
-                      [[0, 0], [0, 0], [1, 0], [0, 0], [1, 0]],
-                      [[0, 0], [0, 0], [0, 0], [1, 0], [0, 0]],
-                      [[0, 0], [0, 0], [0, 0], [1, 0], [0, 0]],
-                      [[0, 0], [0, 0], [0, 0], [1, 0], [0, 0]],
-                      [[0, 0], [0, 0], [0, 0], [1, 0], [0, 0]],
-                      [[0, 0], [0, 0], [0, 0], [1, 0], [0, 0]]]
+    shift_requests = [[[0, 0, 1], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 1],
+                       [0, 1, 0], [0, 0, 1]],
+                      [[0, 0, 0], [0, 0, 0], [0, 1, 0], [0, 1, 0], [1, 0, 0],
+                       [0, 0, 0], [0, 0, 1]],
+                      [[0, 1, 0], [0, 1, 0], [0, 0, 0], [1, 0, 0], [0, 0, 0],
+                       [0, 1, 0], [0, 0, 0]],
+                      [[0, 0, 1], [0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 0],
+                       [1, 0, 0], [0, 0, 0]],
+                      [[0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 0, 0], [1, 0, 0],
+                       [0, 1, 0], [0, 0, 0]]]
 
 
 ## Next steps: update shift_requests so it interacts with our classes! Change number of nurses to 5 to make the program work. Also change num_shifts to 2
@@ -254,12 +140,63 @@ def main():
 # what's confusing is how there can be different number of shift preferences (ie. morning or afternoon), but more than one shift per day
 ## the error is coming from shifts[(n, d, s)]. It's expecting 8 variables (since there are 8 shifts) but only getting 2 preferences (I think)
 
+                   [[[1, 0], [0, 0], [0, 0], [1, 0], [0, 0]],
+                      [[0, 0], [1, 0], [0, 0], [0, 0], [1, 0]],
+                      [[0, 0], [1, 0], [1, 0], [0, 0], [0, 0]],
+                      [[1, 0], [0, 0], [0, 0], [1, 0], [0, 0]],
+                      [[0, 0], [0, 0], [1, 0], [0, 0], [1, 0]],
+                      [[0, 0], [0, 0], [0, 0], [1, 0], [0, 0]],
+                      [[0, 0], [0, 0], [0, 0], [1, 0], [0, 0]],
+                      [[0, 0], [0, 0], [0, 0], [1, 0], [0, 0]],
+                      [[0, 0], [0, 0], [0, 0], [1, 0], [0, 0]],
+                      [[0, 0], [0, 0], [0, 0], [1, 0], [0, 0]]]
+'''
 
-# Creates the model.
+
+
+## Create a program that creates random matrices
+
+# number of placeholders in half a set
+morning_shifts = 6
+evening_shifts = 6
+num_of_agents_available = 11
+
+
+
+# create day by day
+y = ["Morning", "Morning", "Evening", "Evening", "Morning", "Not_available", "Evening", "Morning", "Evening", "Evening", "Evening"]
+for x in range(num_of_agents_available):
+    if y[x] != "Not_available":
+        print(np.random.randint(2,size=morning_shifts))
+    else: print("Not_Available")
+
+## next steps: add commas to separate the values in the matrix. once complete, you can create the new schedule_pref which will comprise of [morning + evening]
+## example: morning = [0,0,0,0,0,1,0,0,0,0,0,0] vs evening = [0,0,0,0,0,0,0,0,0,0,0,1]
+## enter final matrix into program and iteration 1 is complete
+
+
+'''
+
+def main():
+    num_nurses = 11
+    num_shifts = 2
+    num_days = 5
+    all_nurses = range(num_nurses)
+    all_shifts = range(num_shifts)
+    all_days = range(num_days)
+    shift_requests = [[[1, 0], [0, 1], [0, 1], [0, 0], [0, 0]], [[1, 0], [1, 0], [0, 1], [0, 0], [1, 0]],
+                     [[0, 1], [0, 1], [1, 0], [1, 0], [0, 1]], [[1, 0], [0, 0], [0, 1], [0, 1], [0, 1]],
+                     [[0, 1], [0, 1], [0, 1], [1, 0], [1, 0]], [[0, 0], [0, 0], [0, 1], [1, 0], [1, 0]],
+                     [[0, 1], [0, 1], [0, 1], [1, 0], [0, 1]], [[1, 0], [1, 0], [0, 0], [1, 0], [0, 1]],
+                     [[1, 0], [0, 1], [0, 1], [0, 1], [1, 0]], [[0, 1], [1, 0], [0, 1], [0, 1], [0, 1]],
+                     [[0, 1], [1, 0], [1, 0], [0, 1], [0, 1]]]
+
+
+    # Creates the model.
     model = cp_model.CpModel()
 
     # Creates shift variables.
-    # shifts[(n, d, s)]: nurse 'n' works shift 's' on day 'd'.
+    # shifts[(n, d, s)]: nurse 'n' works on day 'd' for shift 's'.
     shifts = {}
     for n in all_nurses:
         for d in all_days:
@@ -267,15 +204,17 @@ def main():
                 shifts[(n, d,
                         s)] = model.NewBoolVar('shift_n%id%is%i' % (n, d, s))
 
+    print(shifts)
+
     # Each shift is assigned to exactly one nurse in .
     for d in all_days:
         for s in all_shifts:
             model.Add(sum(shifts[(n, d, s)] for n in all_nurses) == 1)
 
-    # # Each nurse works at most one shift per day.
-    # for n in all_nurses:
-    #     for d in all_days:
-    #         model.Add(sum(shifts[(n, d, s)] for s in all_shifts) <= 1)
+    # Each nurse works at most one shift per day.
+    for n in all_nurses:
+        for d in all_days:
+            model.Add(sum(shifts[(n, d, s)] for s in all_shifts) <= 1)
 
     # min_shifts_assigned is the largest integer such that every nurse can be
     # assigned at least that number of shifts.
@@ -287,7 +226,7 @@ def main():
         model.Add(min_shifts_per_nurse <= num_shifts_worked)
         model.Add(num_shifts_worked <= max_shifts_per_nurse)
 
-    model.Maximize(                                                                         # finds the product between shift_req and actual shifts. if 1 then it will add on top of one another. In the end the program will find the solution with the largest sum
+    model.Maximize(                                                     # finds the product between shift_req and actual shifts. if 1 then it will add on top of one another. In the end the program will find the solution with the largest sum
         sum(shift_requests[n][d][s] * shifts[(n, d, s)] for n in all_nurses
             for d in all_days for s in all_shifts))
     # Creates the solver and solve.
@@ -297,7 +236,7 @@ def main():
         print('Day', d)
         for n in all_nurses:
             for s in all_shifts:
-                if solver.Value(shifts[(n, d, s)]) == 1:                        # if shift for n,d,s is part of the solution that gen max values then you include it
+                if solver.Value(shifts[(n, d, s)]) == 1:                # if shift for n,d,s is part of the solution that gen max values then you include it
                     if shift_requests[n][d][s] == 1:
                         print('Nurse', n, 'works shift', s, '(requested).')
                     else:
@@ -314,3 +253,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+'''
+
