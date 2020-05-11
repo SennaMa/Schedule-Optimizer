@@ -1,6 +1,7 @@
 from __future__ import print_function
 from ortools.sat.python import cp_model
 import numpy as np
+import random
 
 
 # ## SAMPLE
@@ -154,42 +155,117 @@ class Nurse():   # input agent details (ie. name, hours required, shift preferen
 
 
 
-## Create a program that creates random matrices
+## The below creates random matrices and assigns availability to either morning or evening shift
+#
+# morning_shifts = 3
+# evening_shifts = 4
+# num_of_agents_available = 11
 
-# number of placeholders in half a set
-morning_shifts = 6
-evening_shifts = 6
-num_of_agents_available = 11
 
+
+## LEFT OFF HERE:
+# we basically need to generate a new random value each time and then insert it into the morning/evening_shift matrix so we can replace the 0 with a 1
+# need to make sure that the value is being randomized each time
+# then find a way to append [0,0,0...] to morning and evening shift
+
+
+# og_morning_shift_matrix = [0,0,0,0,0,0]
+# og_evening_shift_matrix = [0,0,0,0,0,0]
+# og_not_available_matrix = [0,0,0,0,0,0]
+#
+# morning_shift_matrix = [0,0,0,0,0,0]
+# evening_shift_matrix = [0,0,0,0,0,0]
+# not_available_matrix = [0,0,0,0,0,0]
+
+# random_value = random.randint(0,morning_shifts)
+# morning_shift_matrix[random_value] = 1
+#
+# random_value = random.randint(0,evening_shifts)
+# evening_shift_matrix[random_value] = 1
 
 
 # create day by day
-y = ["Morning", "Morning", "Evening", "Evening", "Morning", "Not_available", "Evening", "Morning", "Evening", "Evening", "Evening"]
-for x in range(num_of_agents_available):
-    if y[x] != "Not_available":
-        print(np.random.randint(2,size=morning_shifts))
-    else: print("Not_Available")
+# pulling from our spreadsheet
 
-## next steps: add commas to separate the values in the matrix. once complete, you can create the new schedule_pref which will comprise of [morning + evening]
-## example: morning = [0,0,0,0,0,1,0,0,0,0,0,0] vs evening = [0,0,0,0,0,0,0,0,0,0,0,1]
-## enter final matrix into program and iteration 1 is complete
+#y = ["Morning","Morning","Morning","Morning","Morning", "Not available", "Evening", "Morning", "Evening","Evening","Evening"]
 
+# schedule_matrix = []
+# for x in range(num_of_agents_available):
+#     random_value = random.randint(0, morning_shifts)
+#     morning_shift_matrix[random_value] = 1
+#
+#     random_value = random.randint(0, evening_shifts)
+#     evening_shift_matrix[random_value] = 1
+#
+#     if y[x] == "Morning":
+#         schedule_matrix.insert(x,morning_shift_matrix)
+#
+#     elif y[x] == "Evening":
+#         schedule_matrix.insert(x, evening_shift_matrix)
+#
+#     elif y[x] == "Not_available":
+#         schedule_matrix.insert(x,not_available_matrix)
+#
+# print(schedule_matrix)
+
+
+#### REWORK THE ABOVE BUT USE THE BELOW FOR NOW
+# number of placeholders in half a set
 
 '''
+morning_shifts = 6
+evening_shifts = 6
+num_of_agents_available = 20
+
+
+# create day by day
+mond = ["Evening","Morning","Afternoon","Morning","Morning","Not available","Evening","Evening","Morning","Evening","Evening","Evening","Evening","Morning","Evening","Morning","Evening","Morning","Evening","Not available"]
+tues = ["Morning","Morning","Afternoon","Not available","Morning","Not available","Evening","Morning","Evening","Evening","Morning","Morning","Evening","Evening","Evening","Morning","Evening","Evening","Morning","Evening"]
+wed = ["Morning","Morning","Afternoon","Evening","Evening","Evening","Morning","Not available","Evening","Evening","Evening","Morning","Morning","Morning","Morning","Not available","Morning","Morning","Morning","Morning"]
+thurs = ["Not available","Not available","Evening","Afternoon","Morning","Morning","Morning","Morning","Morning","Evening","Evening","Morning","Morning","Morning","Evening","Evening","Evening","Evening","Evening","Evening"]
+fri = ["Not available","Morning","Morning","Afternoon","Morning","Morning","Evening","Morning","Morning","Evening","Evening","Evening","Morning","Morning","Not available","Morning","Morning","Evening","Evening","Morning"]
+
+for x in range(num_of_agents_available):
+    if mond[x] != "Not available":
+        print(np.random.randint(2,size=morning_shifts))
+    else:
+        print("not_available")
+
+
+
+## enter final matrix into program and iteration 1 is complete
+'''
+
+
 
 def main():
-    num_nurses = 11
-    num_shifts = 2
-    num_days = 5
+    num_nurses = 20
+    num_shifts = 12
+    num_days = 4
     all_nurses = range(num_nurses)
     all_shifts = range(num_shifts)
     all_days = range(num_days)
-    shift_requests = [[[1, 0], [0, 1], [0, 1], [0, 0], [0, 0]], [[1, 0], [1, 0], [0, 1], [0, 0], [1, 0]],
-                     [[0, 1], [0, 1], [1, 0], [1, 0], [0, 1]], [[1, 0], [0, 0], [0, 1], [0, 1], [0, 1]],
-                     [[0, 1], [0, 1], [0, 1], [1, 0], [1, 0]], [[0, 0], [0, 0], [0, 1], [1, 0], [1, 0]],
-                     [[0, 1], [0, 1], [0, 1], [1, 0], [0, 1]], [[1, 0], [1, 0], [0, 0], [1, 0], [0, 1]],
-                     [[1, 0], [0, 1], [0, 1], [0, 1], [1, 0]], [[0, 1], [1, 0], [0, 1], [0, 1], [0, 1]],
-                     [[0, 1], [1, 0], [1, 0], [0, 1], [0, 1]]]
+    shift_requests = [[[1,1,1,1,1,1,0,0,0,0,0,0],[1,1,1,1,1,1,0,0,0,0,0,0],[1,1,1,1,1,1,0,0,0,0,0,0],[1,1,1,1,1,1,0,0,0,0,0,0]],
+                    [[1,1,1,1,1,1,0,0,0,0,0,0],[0,0,0,0,0,0,1,1,1,1,1,1],[1,1,1,1,1,1,0,0,0,0,0,0],[0,0,0,0,0,0,1,1,1,1,1,1]],
+                    [[1,1,1,1,1,1,0,0,0,0,0,0],[0,0,0,0,0,0,1,1,1,1,1,1],[0,0,0,0,0,0,0,0,0,0,0,0],[1,1,1,1,1,1,0,0,0,0,0,0]],
+                    [[0,0,0,0,0,0,1,1,1,1,1,1],[0,0,0,0,0,0,1,1,1,1,1,1],[1,1,1,1,1,1,0,0,0,0,0,0],[1,1,1,1,1,1,0,0,0,0,0,0]],
+                    [[0,0,0,0,0,0,1,1,1,1,1,1],[0,0,0,0,0,0,1,1,1,1,1,1],[0,0,0,0,0,0,1,1,1,1,1,1],[0,0,0,0,0,0,1,1,1,1,1,1]],
+                    [[1,1,1,1,1,1,0,0,0,0,0,0],[0,0,0,0,0,0,1,1,1,1,1,1],[1,1,1,1,1,1,0,0,0,0,0,0],[0,0,0,0,0,0,1,1,1,1,1,1]],
+                    [[0,0,0,0,0,0,1,1,1,1,1,1],[1,1,1,1,1,1,0,0,0,0,0,0],[0,0,0,0,0,0,1,1,1,1,1,1],[1,1,1,1,1,1,0,0,0,0,0,0]],
+                    [[0,0,0,0,0,0,1,1,1,1,1,1],[0,0,0,0,0,0,1,1,1,1,1,1],[0,0,0,0,0,0,1,1,1,1,1,1],[1,1,1,1,1,1,0,0,0,0,0,0]],
+                    [[1,1,1,1,1,1,0,0,0,0,0,0],[1,1,1,1,1,1,0,0,0,0,0,0],[1,1,1,1,1,1,0,0,0,0,0,0],[1,1,1,1,1,1,0,0,0,0,0,0]],
+                    [[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,1,1,1,1,1],[0,0,0,0,0,0,1,1,1,1,1,1]],
+                    [[0,0,0,0,0,0,1,1,1,1,1,1],[1,1,1,1,1,1,0,0,0,0,0,0],[0,0,0,0,0,0,1,1,1,1,1,1],[0,0,0,0,0,0,1,1,1,1,1,1]],
+                    [[1,1,1,1,1,1,0,0,0,0,0,0],[1,1,1,1,1,1,0,0,0,0,0,0],[1,1,1,1,1,1,0,0,0,0,0,0],[1,1,1,1,1,1,0,0,0,0,0,0]],
+                    [[1,1,1,1,1,1,0,0,0,0,0,0],[1,1,1,1,1,1,0,0,0,0,0,0],[0,0,0,0,0,0,1,1,1,1,1,1],[0,0,0,0,0,0,1,1,1,1,1,1]],
+                    [[0,0,0,0,0,0,1,1,1,1,1,1],[0,0,0,0,0,0,0,0,0,0,0,0],[1,1,1,1,1,1,0,0,0,0,0,0],[0,0,0,0,0,0,1,1,1,1,1,1]],
+                    [[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,1,1,1,1,1],[1,1,1,1,1,1,0,0,0,0,0,0],[1,1,1,1,1,1,0,0,0,0,0,0]],
+                    [[1,1,1,1,1,1,0,0,0,0,0,0],[0,0,0,0,0,0,1,1,1,1,1,1],[0,0,0,0,0,0,1,1,1,1,1,1],[0,0,0,0,0,0,1,1,1,1,1,1]],
+                    [[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0]],
+                    [[1,1,1,1,1,1,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,1,1,1,1,1],[1,1,1,1,1,1,0,0,0,0,0,0]],
+                    [[0,0,0,0,0,0,1,1,1,1,1,1],[0,0,0,0,0,0,1,1,1,1,1,1],[1,1,1,1,1,1,0,0,0,0,0,0],[0,0,0,0,0,0,1,1,1,1,1,1]],
+                    [[0,0,0,0,0,0,1,1,1,1,1,1],[0,0,0,0,0,0,1,1,1,1,1,1],[1,1,1,1,1,1,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0]]]
+
 
 
     # Creates the model.
@@ -204,7 +280,7 @@ def main():
                 shifts[(n, d,
                         s)] = model.NewBoolVar('shift_n%id%is%i' % (n, d, s))
 
-    print(shifts)
+
 
     # Each shift is assigned to exactly one nurse in .
     for d in all_days:
@@ -254,5 +330,4 @@ def main():
 if __name__ == '__main__':
     main()
 
-'''
 
