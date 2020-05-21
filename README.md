@@ -6,14 +6,19 @@ Completed:
  1. Framework - how to gather inputs and what will the output look like 
  2. Conditions - which conditions and critera we require to restrict or allow for certain bookings
  3. Integration of Google's OR-tools - created a schedule using OR-tools. Next steps would be to work on iterations 2 and 3. 
+ 4. Iteration 1 - Program works and a schedule is created in 2.44 minutes. However, this is reliant on Py and Google 
+ Spreadsheet. 
  
+# Current Goal:
+1. Read Clean Code by Robert C Martin
+2. Iteration 2 
+  * Incorporate your readings and clean your code
+  * Continue to build off classes. We want this to be as easy as inputting the values and generating the schedule 
+  * We'll continue to rely on the Spreadsheet for visualization purposes 
+  * Think about usability (ie. how can anyone run?)
  
 What's next:
- 1. Iteration 2 and 3 - adding more complex layers to the schedule 
- 2. Visualization - improving how the resutls are visualized. Currently this requires manual effort 
+ 1. Iteration 3 - adding more complex layers to the schedule 
+ 2. Visualization - improving how the results are visualized. Currently this requires manual effort 
  3. Inputs - setting up a fool-proof way to gather inputs. This includes employee preferences and employer requirements 
  
-Thoughts: 
- 1. Check out [Google's Employee Scheduling](https://developers.google.com/optimization/scheduling/employee_scheduling)
-   * after going through the above - should we integrate it with what we have? 
-   * output: shows all feasible solutions based on the constaints. [Here](https://developers.google.com/optimization/cp/cp_solver#cp-sat_variables) for an example. 
